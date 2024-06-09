@@ -39,18 +39,18 @@ const MockCommands = [
 ]
 
 const Dialog = () => {
-  const { messages, dispatchCommand, dispatchMessage } = useChatBot()
+  const { messages, commands, dispatchCommand, dispatchMessage } = useChatBot()
 
   //   const dispatchCommand = (command) => {
   //     alert(command)
   //   }
 
-  //   console.log(messages)
+  // console.log(commands)
   return (
     <DialogWindow>
       <MessageList data={messages ?? []} />
       <MessageInput
-        commands={MockCommands}
+        commands={commands}
         dispatchCommand={dispatchCommand}
         dispatchMessage={dispatchMessage}
       />

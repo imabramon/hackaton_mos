@@ -37,44 +37,109 @@ const GetProductsNode = {
   ],
 }
 
-const chatBotState = {
+const chatBotNodes = {
   [CommandsTypes.start]: StartNode,
+}
+
+const TestNodes = {
+  start: {
+    commands: [
+      {
+        name: '1',
+        to: 'testNode1',
+      },
+      {
+        name: '2',
+        to: 'testNode3',
+      },
+      {
+        name: '3',
+        to: 'testNode3',
+      },
+    ],
+  },
+  testNode1: {
+    commands: [
+      {
+        name: '2',
+        to: 'testNode2',
+      },
+      {
+        name: 'Назад',
+        to: 'start',
+      },
+    ],
+  },
+  testNode2: {
+    commands: [
+      {
+        name: '3',
+        to: 'testNode3',
+      },
+      {
+        name: 'Назад',
+        to: 'start',
+      },
+    ],
+  },
+  testNode3: {
+    commands: [
+      {
+        name: '1',
+        to: 'testNode1',
+      },
+      {
+        name: 'Назад',
+        to: 'start',
+      },
+    ],
+  },
 }
 
 const ActionTypes = {
   addMessage: 'addMessage',
+  changeNode: 'changeNode',
 }
 
-const InitState = {
+const InitState = (Scenario = TestNodes, currentNode = 'start') => ({
   messages: [
     { from: FromTypes.bot, text: 'Вечер в хату' },
     { from: FromTypes.user, text: 'Че там с деньгами?' },
     { from: FromTypes.bot, text: 'С каими деньгами?' },
   ],
-}
+  currentNode,
+  currentCommands: Scenario[currentNode].commands,
+})
 
-const reducer = (state = InitState, action) => {
-  switch (action.type) {
-    case ActionTypes.addMessage: {
-      // console.log('add mes')
-      const { text, from } = action.payload
-      const { messages } = state
-      return { ...state, messages: [...messages, { text, from }] }
-    }
-    default: {
-      return state
+const reducer =
+  (Scenario = TestNodes) =>
+  (state = InitState(), action) => {
+    switch (action.type) {
+      case ActionTypes.addMessage: {
+        // console.log('add mes')
+        const { text, from } = action.payload
+        const { messages } = state
+        return { ...state, messages: [...messages, { text, from }] }
+      }
+      case ActionTypes.changeNode: {
+        const { to } = action.payload
+        return {
+          ...state,
+          currentNode: to,
+          currentCommands: Scenario[to].commands,
+        }
+      }
+      default: {
+        return state
+      }
     }
   }
-}
 
 const useChatBot = () => {
-  const [state, dispatch] = useReducer(reducer, InitState)
+  const [state, dispatch] = useReducer(reducer(), InitState())
 
-  const dispatchCommand = (command) => {
-    dispatch({
-      type: ActionTypes.addMessage,
-      payload: { from: FromTypes.user, text: command },
-    })
+  const dispatchCommand = (nextNode) => {
+    dispatch({ type: ActionTypes.changeNode, payload: { to: nextNode } })
   }
 
   const dispatchMessage = (message) => {
@@ -86,7 +151,12 @@ const useChatBot = () => {
 
   // console.log('hook', state.messages)
 
-  return { messages: state?.messages, dispatchCommand, dispatchMessage }
+  return {
+    messages: state?.messages,
+    commands: state?.currentCommands,
+    dispatchCommand,
+    dispatchMessage,
+  }
 }
 
 export default useChatBot

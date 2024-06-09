@@ -39,14 +39,15 @@ function shuffle(array) {
   return array
 }
 
-const CommandPalette = ({ dispatchCommand, commands }) => {
+const CommandPalette = ({ dispatchCommand, dispatchMessage, commands }) => {
   return (
     <Container>
-      {shuffle(commands).map((name, index) => (
+      {commands.map(({ name, to: nextNode }, index) => (
         <Command
           key={index}
           onClick={() => {
-            dispatchCommand(name)
+            dispatchMessage(name)
+            dispatchCommand(nextNode)
           }}
         >
           {name}
