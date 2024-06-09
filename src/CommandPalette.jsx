@@ -1,0 +1,59 @@
+import React from 'react'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  position: absolute;
+  transform: translateY(-100%);
+  width: 100%;
+  height: fit-content;
+  background-color: black;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px;
+`
+
+const Command = styled.span`
+  padding: 5px;
+  border-radius: 5px;
+  background-color: green;
+  color: white;
+`
+
+function shuffle(array) {
+  let currentIndex = array.length
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+    // Pick a remaining element...
+    let randomIndex = Math.floor(Math.random() * currentIndex)
+    currentIndex--
+
+    // And swap it with the current element.
+    ;[array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ]
+  }
+
+  return array
+}
+
+const CommandPalette = ({ dispatchCommand, commands }) => {
+  return (
+    <Container>
+      {shuffle(commands).map((name, index) => (
+        <Command
+          key={index}
+          onClick={() => {
+            dispatchCommand(name)
+          }}
+        >
+          {name}
+        </Command>
+      ))}
+    </Container>
+  )
+}
+
+export default CommandPalette
