@@ -43,6 +43,7 @@ const chatBotNodes = {
 
 const TestNodes = {
   start: {
+    message: 'Выберите этап',
     commands: [
       {
         name: '1',
@@ -59,6 +60,7 @@ const TestNodes = {
     ],
   },
   testNode1: {
+    message: 'Напишите для этапа 1',
     commands: [
       {
         name: '2',
@@ -71,6 +73,7 @@ const TestNodes = {
     ],
   },
   testNode2: {
+    message: 'Напишите для этапа 2',
     commands: [
       {
         name: '3',
@@ -83,6 +86,7 @@ const TestNodes = {
     ],
   },
   testNode3: {
+    message: 'Напишите для этапа 3',
     commands: [
       {
         name: '1',
@@ -127,6 +131,10 @@ const reducer =
           ...state,
           currentNode: to,
           currentCommands: Scenario[to].commands,
+          messages: [
+            ...state.messages,
+            { from: FromTypes.bot, text: Scenario[to].message },
+          ],
         }
       }
       default: {
