@@ -7,6 +7,8 @@ const Container = styled.div`
   gap: 10px;
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+  padding: 10px;
 `
 
 const MessageList = ({ data }) => {
