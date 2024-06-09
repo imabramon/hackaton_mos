@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
-import { MessageBox } from 'react-chat-elements'
+//import { MessageBox } from 'react-chat-elements'
 import UserInfoContext from './UserInfoContext'
+import MessageBox from './MessageBox'
 
 export const FromTypes = {
   bot: 'bot',
@@ -27,43 +28,13 @@ export const makeUserMessage = (text) => {
   }
 }
 
-const UserMessage = ({ type, text }) => {
-  const userInfo = useContext(UserInfoContext)
-  const props = {
-    title: userInfo.username,
-    text: text,
-  }
-  switch (type) {
-    default: {
-      return (
-        <MessageBox
-          position="right"
-          title="Чат-бот"
-          type="text"
-          date={new Date()}
-          replyButton={true}
-          {...props}
-        />
-      )
-    }
-  }
+const UserMessage = ({ text }) => {
+  const { username } = useContext(UserInfoContext)
+  return <MessageBox title={username} text={text} />
 }
 
-const BotMessage = ({ type, text }) => {
-  switch (type) {
-    default: {
-      return (
-        <MessageBox
-          position="left"
-          title="Чат-бот"
-          type="text"
-          text={text}
-          date={new Date()}
-          replyButton={true}
-        />
-      )
-    }
-  }
+const BotMessage = ({ text }) => {
+  return <MessageBox position="left" title="Чат-бот" text={text} />
 }
 
 export default Message
