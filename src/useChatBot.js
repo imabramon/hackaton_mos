@@ -1,104 +1,16 @@
 import { act, useReducer } from 'react'
 import { FromTypes } from './Message'
+import { TestNodes } from './Scenarios'
+import CommandsTypes from './CommandsType'
 
-const CommandsTypes = {
-  start: 'start',
-  amountGetDate: 'amountGetDate',
-  amountGetProducts: 'amountGetProducts',
-  amount: 'amount',
-  forecast: 'forecats',
-  procurement: 'procurement',
-}
-
-const StartNode = {
-  commands: [
-    {
-      name: 'Остатки',
-      to: CommandsTypes.amountGetDate,
-    },
-  ],
-}
-
-const GetDateNode = {
-  commands: [
-    {
-      name: 'Назад',
-      to: CommandsTypes.start,
-    },
-  ],
-}
-
-const GetProductsNode = {
-  commands: [
-    {
-      name: 'Назад',
-      to: CommandsTypes.start,
-    },
-  ],
-}
-
-const chatBotNodes = {
-  [CommandsTypes.start]: StartNode,
-}
-
-const TestNodes = {
-  start: {
-    message: 'Выберите этап',
-    commands: [
-      {
-        name: '1',
-        to: 'testNode1',
-      },
-      {
-        name: '2',
-        to: 'testNode3',
-      },
-      {
-        name: '3',
-        to: 'testNode3',
-      },
-    ],
-  },
-  testNode1: {
-    message: 'Напишите для этапа 1',
-    commands: [
-      {
-        name: '2',
-        to: 'testNode2',
-      },
-      {
-        name: 'Назад',
-        to: 'start',
-      },
-    ],
-  },
-  testNode2: {
-    message: 'Напишите для этапа 2',
-    commands: [
-      {
-        name: '3',
-        to: 'testNode3',
-      },
-      {
-        name: 'Назад',
-        to: 'start',
-      },
-    ],
-  },
-  testNode3: {
-    message: 'Напишите для этапа 3',
-    commands: [
-      {
-        name: '1',
-        to: 'testNode1',
-      },
-      {
-        name: 'Назад',
-        to: 'start',
-      },
-    ],
-  },
-}
+// const CommandsTypes = {
+//   start: 'start',
+//   amountGetDate: 'amountGetDate',
+//   amountGetProducts: 'amountGetProducts',
+//   amount: 'amount',
+//   forecast: 'forecats',
+//   procurement: 'procurement',
+// }
 
 const ActionTypes = {
   addMessage: 'addMessage',
@@ -117,7 +29,8 @@ const InitState = (Scenario = TestNodes, currentNode = 'start') => ({
 
 const reducer =
   (Scenario = TestNodes) =>
-  (state = InitState(), action) => {
+  (state, action) => {
+    //console.log(state)
     switch (action.type) {
       case ActionTypes.addMessage: {
         // console.log('add mes')
@@ -127,6 +40,7 @@ const reducer =
       }
       case ActionTypes.changeNode: {
         const { to } = action.payload
+        console.log(to)
         return {
           ...state,
           currentNode: to,
@@ -143,11 +57,41 @@ const reducer =
     }
   }
 
-const useChatBot = () => {
-  const [state, dispatch] = useReducer(reducer(), InitState())
+const useChatBot = (Scenario = TestNodes) => {
+  const [state, dispatch] = useReducer(reducer(Scenario), InitState(Scenario))
 
-  const dispatchCommand = (nextNode) => {
-    dispatch({ type: ActionTypes.changeNode, payload: { to: nextNode } })
+  const dispatchCommand = ({ type = CommandsTypes.changeNode, ...payload }) => {
+    switch (type) {
+      case CommandsTypes.changeNode: {
+        dispatch({
+          type: ActionTypes.addMessage,
+          payload: { from: FromTypes.user, text: payload.name },
+        })
+        dispatch({ type: ActionTypes.changeNode, payload })
+        return
+      }
+      case CommandsTypes.async: {
+        const { message, callback } = payload
+        dispatch({
+          type: ActionTypes.addMessage,
+          payload: { from: FromTypes.bot, text: message },
+        })
+        ;(async () => {
+          const nextCommand = await callback()
+          dispatchCommand(nextCommand)
+        })()
+        return
+      }
+      case CommandsTypes.changeNodeWithMsg: {
+        const { message } = payload
+        console.log(payload)
+        dispatch({
+          type: ActionTypes.addMessage,
+          payload: { from: FromTypes.bot, text: message },
+        })
+        dispatch({ type: ActionTypes.changeNode, payload })
+      }
+    }
   }
 
   const dispatchMessage = (message) => {

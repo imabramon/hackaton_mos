@@ -39,11 +39,7 @@ const MessageInput = ({
 
   return (
     <Container>
-      <CommandPalette
-        dispatchCommand={dispatchCommand}
-        commands={commands}
-        dispatchMessage={dispatchMessage}
-      />
+      <CommandPalette dispatchCommand={dispatchCommand} commands={commands} />
       <Input
         value={input}
         onChange={onChange}
