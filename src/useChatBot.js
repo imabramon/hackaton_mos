@@ -1,7 +1,8 @@
 import { act, useReducer } from 'react'
 import { FromTypes } from './Message'
-import { TestNodes, TestNodesNames } from './Scenarios'
-import CommandsTypes from './CommandsType'
+import { TestNodes } from './Scanarios/TestScenario'
+import { CommandsTypes } from './Scanarios/types'
+import { TestNodesNames } from './Scanarios/TestScenario/nodes'
 
 // const CommandsTypes = {
 //   start: 'start',
