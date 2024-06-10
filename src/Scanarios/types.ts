@@ -6,19 +6,20 @@ export enum CommandsTypes {
   changeNodeWithMsg,
 }
 
-export type Command<NodeNames> =
-  | GoToCommand<NodeNames>
-  | AsyncCommand<NodeNames>
-
-export type GoToCommand<NodeNames> = {
+type BaseCommand = {
   type: CommandsTypes
   name: string
+}
+
+type OtherCommands<NodeNames> = GoToCommand<NodeNames> | AsyncCommand<NodeNames>
+
+export type Command<NodeNames> = BaseCommand & OtherCommands<NodeNames>
+
+export type GoToCommand<NodeNames> = {
   to: NodeNames
 }
 
 export type AsyncCommand<NodeNames> = {
-  type: CommandsTypes
-  name: string
   message: string
   callback: () => Promise<Command<NodeNames>>
 }

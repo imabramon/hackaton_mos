@@ -1,4 +1,4 @@
-import { AsyncCommand, CommandsTypes } from '../types'
+import { AsyncCommand, Command, CommandsTypes } from '../types'
 
 export enum TestNodesNames {
   start,
@@ -7,7 +7,7 @@ export enum TestNodesNames {
   testNode3,
 }
 
-export const asyncCommand: AsyncCommand<TestNodesNames> = {
+export const asyncCommand: Command<TestNodesNames> = {
   name: 'Загрузить остаток',
   type: CommandsTypes.async,
   message: 'загружаем данные',
@@ -24,7 +24,7 @@ export const asyncCommand: AsyncCommand<TestNodesNames> = {
     }),
 }
 
-export const GoToNode1 = {
+export const GoToNode1: Command<TestNodesNames> = {
   type: CommandsTypes.changeNode,
   name: '1',
   to: TestNodesNames.testNode1,
