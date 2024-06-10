@@ -1,6 +1,6 @@
 import { act, useReducer } from 'react'
 import { FromTypes } from './Message'
-import { TestNodes } from './Scenarios'
+import { TestNodes, TestNodesNames } from './Scenarios'
 import CommandsTypes from './CommandsType'
 
 // const CommandsTypes = {
@@ -17,7 +17,10 @@ const ActionTypes = {
   changeNode: 'changeNode',
 }
 
-const InitState = (Scenario = TestNodes, currentNode = 'start') => ({
+const InitState = (
+  Scenario = TestNodes,
+  currentNode = TestNodesNames.start
+) => ({
   messages: [
     { from: FromTypes.bot, text: 'Вечер в хату' },
     { from: FromTypes.user, text: 'Че там с деньгами?' },
