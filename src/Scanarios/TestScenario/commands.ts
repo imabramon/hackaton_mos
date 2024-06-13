@@ -12,13 +12,13 @@ export const asyncCommand: Command<TestNodesNames> = {
   name: 'Загрузить остаток',
   type: CommandsTypes.async,
   message: 'загружаем данные',
-  callback: () =>
+  callback: (context) =>
     new Promise((resolve) => {
       setTimeout(() => {
         resolve({
           name: 'Выгрузить остаток',
           type: CommandsTypes.changeNodeWithMsg,
-          message: 'Остатки товара: Танки - 5шт',
+          message: `Остатки товара на ${context.date}: Танки - 5шт`,
           to: TestNodesNames.start,
         })
       }, 2000)

@@ -5,6 +5,11 @@ import { CommandsTypes } from './Scanarios/types'
 import { TestNodesNames } from './Scanarios/TestScenario/commands'
 import { ActionTypes, AppInitState, appActions, appReducer } from './state/app'
 import { bindActionCreators } from './utils/bindActionCreators'
+import {
+  chatBotActions,
+  chatBotInitState,
+  chatBotReducer,
+} from './state/chatBot'
 
 const useChatBot = (Scenario = TestNodes) => {
   const [appState, appDispatch] = useReducer(
@@ -16,6 +21,13 @@ const useChatBot = (Scenario = TestNodes) => {
     appActions,
     appDispatch
   )
+
+  const [chatBotState, chatBotDispatch] = useReducer(
+    chatBotReducer,
+    chatBotInitState
+  )
+
+  const { addVariable } = bindActionCreators(chatBotActions, chatBotDispatch)
 
   const dispatchCommand = ({ type = CommandsTypes.changeNode, ...payload }) => {
     const { name: commandName } = payload
@@ -31,7 +43,7 @@ const useChatBot = (Scenario = TestNodes) => {
         const { message, callback } = payload
         messageFromBot(message)
         ;(async () => {
-          const nextCommand = await callback()
+          const nextCommand = await callback(chatBotState)
           dispatchCommand(nextCommand)
         })()
         return
@@ -49,10 +61,16 @@ const useChatBot = (Scenario = TestNodes) => {
     messageFromUser(message)
 
     if (Scenario[appState.currentNode].validation) {
-      const { validation, errorMessage, nextNode } =
-        Scenario[appState.currentNode]
+      const {
+        validation,
+        errorMessage,
+        nextNode,
+        answerVar,
+        proccesing = (arg) => arg,
+      } = Scenario[appState.currentNode]
 
       if (validation(message)) {
+        addVariable(answerVar, proccesing(message))
         changeNode(nextNode)
         return
       }

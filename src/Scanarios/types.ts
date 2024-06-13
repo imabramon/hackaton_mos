@@ -26,7 +26,7 @@ export type GoToCommand<NodeNames> = {
 
 export type AsyncCommand<NodeNames> = {
   message: string
-  callback: () => Promise<Command<NodeNames>>
+  callback: (context: any) => Promise<Command<NodeNames>>
 }
 
 export enum NodeTypes {
