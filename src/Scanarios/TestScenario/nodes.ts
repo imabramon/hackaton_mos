@@ -36,13 +36,13 @@ export const Stage3Node: ScenarioNode<TestNodesNames> = {
 
 export const DateNode: ScenarioNode<TestNodesNames> = {
   type: NodeTypes.AnswerNode,
-  message: 'Ввведите дату',
+  message: 'Ввведите дату в формате dd.mm.yyyy',
   commands: [GoBack],
   validation: (input) => {
     if (validateDate(input)) return true
     return false
   },
   answerVar: 'date',
-  errorMessage: 'Введите пожалуйста дату',
+  errorMessage: 'Введите пожалуйста дату в формате dd.mm.yyyy',
   nextNode: TestNodesNames.start,
 }

@@ -31,7 +31,7 @@ const InitState = (
   currentCommands: Scenario[currentNode].commands,
 })
 
-const reducer =
+const appReducer =
   (Scenario = TestNodes) =>
   (state, action) => {
     //console.log(state)
@@ -62,7 +62,10 @@ const reducer =
   }
 
 const useChatBot = (Scenario = TestNodes) => {
-  const [state, dispatch] = useReducer(reducer(Scenario), InitState(Scenario))
+  const [appState, dispatch] = useReducer(
+    appReducer(Scenario),
+    InitState(Scenario)
+  )
 
   const dispatchCommand = ({ type = CommandsTypes.changeNode, ...payload }) => {
     switch (type) {
@@ -104,8 +107,9 @@ const useChatBot = (Scenario = TestNodes) => {
       payload: { from: FromTypes.user, text: message },
     })
 
-    if (Scenario[state.currentNode].validation) {
-      const { validation, errorMessage, nextNode } = Scenario[state.currentNode]
+    if (Scenario[appState.currentNode].validation) {
+      const { validation, errorMessage, nextNode } =
+        Scenario[appState.currentNode]
 
       if (validation(message)) {
         dispatch({
@@ -127,8 +131,8 @@ const useChatBot = (Scenario = TestNodes) => {
   // console.log('hook', state.messages)
 
   return {
-    messages: state?.messages,
-    commands: state?.currentCommands,
+    messages: appState?.messages,
+    commands: appState?.currentCommands,
     dispatchCommand,
     dispatchMessage,
   }
