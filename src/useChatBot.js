@@ -103,6 +103,25 @@ const useChatBot = (Scenario = TestNodes) => {
       type: ActionTypes.addMessage,
       payload: { from: FromTypes.user, text: message },
     })
+
+    if (Scenario[state.currentNode].validation) {
+      const { validation, errorMessage, nextNode } = Scenario[state.currentNode]
+
+      if (validation(message)) {
+        dispatch({
+          type: ActionTypes.changeNode,
+          payload: { to: nextNode },
+        })
+        return
+      }
+
+      dispatch({
+        type: ActionTypes.addMessage,
+        payload: { from: FromTypes.bot, text: errorMessage },
+      })
+
+      return
+    }
   }
 
   // console.log('hook', state.messages)

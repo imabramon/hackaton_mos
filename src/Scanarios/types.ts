@@ -1,5 +1,10 @@
 import { TestNodesNames } from './TestScenario/commands'
 
+type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never }
+type XOR<T, U> = T | U extends object
+  ? (Without<T, U> & U) | (Without<U, T> & T)
+  : T | U
+
 export enum CommandsTypes {
   changeNode,
   async,
@@ -24,18 +29,34 @@ export type AsyncCommand<NodeNames> = {
   callback: () => Promise<Command<NodeNames>>
 }
 
-export type ScenarioNode<NodeNames> = {
+export enum NodeTypes {
+  BaseNode,
+  AnswerNode,
+  ContextNode,
+}
+
+export type BaseNode<NodeNames> = {
   message: string
   commands: Command<NodeNames>[]
-  nextNode?: NodeNames
-} & (AnswerNode | {})
+  type: NodeTypes
+}
 
-export type AnswerNode = {
-  validation: () => string
+export type OtherNode<NodeNames> = AnswerNode<NodeNames>
+
+export type ScenarioNode<NodeNames> = XOR<
+  BaseNode<NodeNames>,
+  BaseNode<NodeNames> & OtherNode<NodeNames>
+>
+
+export type AnswerNode<NodeNames> = {
+  validation: ValidationFn
   answerVar: string
-  proccesing: () => any
+  errorMessage: string
+  nextNode: NodeNames
 }
 
 export type Scenario<NodeNames extends TestNodesNames> = {
   [name in NodeNames]: ScenarioNode<NodeNames>
 }
+
+export type ValidationFn = (input: string) => boolean

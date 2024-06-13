@@ -5,6 +5,7 @@ export enum TestNodesNames {
   testNode1,
   testNode2,
   testNode3,
+  getDate,
 }
 
 export const asyncCommand: Command<TestNodesNames> = {
@@ -34,6 +35,12 @@ export const GoToNode2 = {
   type: CommandsTypes.changeNode,
   name: '2',
   to: TestNodesNames.testNode2,
+}
+
+export const GetDate = {
+  type: CommandsTypes.changeNode,
+  name: 'Отчет по дате',
+  to: TestNodesNames.getDate,
 }
 
 export const GoToNode3 = {
