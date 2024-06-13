@@ -44,7 +44,7 @@ const reducer =
       }
       case ActionTypes.changeNode: {
         const { to } = action.payload
-        console.log(to)
+        //console.log(to)
         return {
           ...state,
           currentNode: to,
@@ -88,7 +88,7 @@ const useChatBot = (Scenario = TestNodes) => {
       }
       case CommandsTypes.changeNodeWithMsg: {
         const { message } = payload
-        console.log(payload)
+        //console.log(payload)
         dispatch({
           type: ActionTypes.addMessage,
           payload: { from: FromTypes.bot, text: message },
