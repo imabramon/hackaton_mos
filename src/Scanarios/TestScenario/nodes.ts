@@ -1,49 +1,27 @@
-import { AsyncCommand, Command, CommandsTypes } from '../types'
+import {
+  GoToNode1,
+  GoToNode2,
+  GoToNode3,
+  asyncCommand,
+  GoBack,
+} from './commands'
 
-export enum TestNodesNames {
-  start,
-  testNode1,
-  testNode2,
-  testNode3,
+export const StartNode = {
+  message: 'Выберите этап',
+  commands: [GoToNode1, GoToNode2, GoToNode3, asyncCommand],
 }
 
-export const asyncCommand: Command<TestNodesNames> = {
-  name: 'Загрузить остаток',
-  type: CommandsTypes.async,
-  message: 'загружаем данные',
-  callback: () =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          name: 'Выгрузить остаток',
-          type: CommandsTypes.changeNodeWithMsg,
-          message: 'Остатки товара: Танки - 5шт',
-          to: TestNodesNames.start,
-        })
-      }, 2000)
-    }),
+export const Stage1Node = {
+  message: 'Напишите для этапа 1',
+  commands: [GoToNode2, GoBack],
 }
 
-export const GoToNode1: Command<TestNodesNames> = {
-  type: CommandsTypes.changeNode,
-  name: '1',
-  to: TestNodesNames.testNode1,
+export const Stage2Node = {
+  message: 'Напишите для этапа 2',
+  commands: [GoToNode3, GoBack],
 }
 
-export const GoToNode2 = {
-  type: CommandsTypes.changeNode,
-  name: '2',
-  to: TestNodesNames.testNode2,
-}
-
-export const GoToNode3 = {
-  type: CommandsTypes.changeNode,
-  name: '3',
-  to: TestNodesNames.testNode3,
-}
-
-export const GoBack = {
-  type: CommandsTypes.changeNode,
-  name: 'Назад',
-  to: TestNodesNames.start,
+export const Stage3Node = {
+  message: 'Напишите для этапа 3',
+  commands: [GoToNode1, GoBack],
 }

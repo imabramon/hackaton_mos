@@ -1,4 +1,4 @@
-import { TestNodesNames } from './TestScenario/nodes'
+import { TestNodesNames } from './TestScenario/commands'
 
 export enum CommandsTypes {
   changeNode,
@@ -27,6 +27,13 @@ export type AsyncCommand<NodeNames> = {
 export type ScenarioNode<NodeNames> = {
   message: string
   commands: Command<NodeNames>[]
+  nextNode?: NodeNames
+} & (AnswerNode | {})
+
+export type AnswerNode = {
+  validation: () => string
+  answerVar: string
+  proccesing: () => any
 }
 
 export type Scenario<NodeNames extends TestNodesNames> = {
