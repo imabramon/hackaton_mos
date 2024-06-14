@@ -13,15 +13,16 @@ export const asyncCommand: Command<TestNodesNames> = {
   type: CommandsTypes.async,
   message: 'загружаем данные',
   callback: (context) =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          name: 'Выгрузить остаток',
-          type: CommandsTypes.changeNodeWithMsg,
-          message: `Остатки товара на ${context.date}: Танки - 5шт`,
-          to: TestNodesNames.start,
-        })
-      }, 2000)
+    new Promise(async (resolve) => {
+      // const data = await fetch('http://localhost:3000/employees ')
+      // console.log(data)
+
+      resolve({
+        name: 'Выгрузить остаток',
+        type: CommandsTypes.changeNodeWithMsg,
+        message: `Остатки товара на ${context.date}: Танки - 5шт`,
+        to: TestNodesNames.start,
+      })
     }),
 }
 
