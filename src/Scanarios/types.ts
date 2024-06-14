@@ -18,7 +18,10 @@ type BaseCommand = {
 
 type OtherCommands<NodeNames> = GoToCommand<NodeNames> | AsyncCommand<NodeNames>
 
-export type Command<NodeNames> = BaseCommand & OtherCommands<NodeNames>
+export type Command<NodeNames> = XOR<
+  BaseCommand,
+  BaseCommand & OtherCommands<NodeNames>
+>
 
 export type GoToCommand<NodeNames> = {
   to: NodeNames
@@ -33,20 +36,23 @@ export enum NodeTypes {
   BaseNode,
   AnswerNode,
   ContextNode,
+  ExecuteNode,
 }
-
-export type BaseNode<NodeNames> = {
-  message: string
-  commands: Command<NodeNames>[]
-  type: NodeTypes
-}
-
-export type OtherNode<NodeNames> = AnswerNode<NodeNames>
 
 export type ScenarioNode<NodeNames> = XOR<
   BaseNode<NodeNames>,
   BaseNode<NodeNames> & OtherNode<NodeNames>
 >
+
+export type BaseNode<NodeNames> = {
+  message?: string
+  commands: Command<NodeNames>[]
+  type: NodeTypes
+}
+
+export type OtherNode<NodeNames> =
+  | AnswerNode<NodeNames>
+  | ExecuteNode<NodeNames>
 
 export type AnswerNode<NodeNames> = {
   validation: ValidationFn
@@ -55,7 +61,11 @@ export type AnswerNode<NodeNames> = {
   nextNode: NodeNames
 }
 
-export type Scenario<NodeNames extends TestNodesNames> = {
+export type ExecuteNode<NodeNames> = {
+  execute: Command<NodeNames>
+}
+
+export type Scenario<NodeNames extends number | string> = {
   [name in NodeNames]: ScenarioNode<NodeNames>
 }
 

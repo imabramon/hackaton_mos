@@ -1,7 +1,7 @@
 import { act, useReducer } from 'react'
 import { FromTypes } from './Message'
 import { TestNodes } from './Scanarios/TestScenario'
-import { CommandsTypes } from './Scanarios/types'
+import { CommandsTypes, NodeTypes } from './Scanarios/types'
 import { TestNodesNames } from './Scanarios/TestScenario/commands'
 import { ActionTypes, AppInitState, appActions, appReducer } from './state/app'
 import { bindActionCreators } from './utils/bindActionCreators'
@@ -11,16 +11,17 @@ import {
   chatBotReducer,
 } from './state/chatBot'
 
-const useChatBot = (Scenario = TestNodes) => {
+const useChatBot = (Scenario, startNode) => {
   const [appState, appDispatch] = useReducer(
     appReducer(Scenario),
-    AppInitState(Scenario)
+    AppInitState(Scenario, startNode)
   )
 
-  const { messageFromBot, messageFromUser, changeNode } = bindActionCreators(
-    appActions,
-    appDispatch
-  )
+  const {
+    messageFromBot,
+    messageFromUser,
+    changeNode: changeNodeRef,
+  } = bindActionCreators(appActions, appDispatch)
 
   const [chatBotState, chatBotDispatch] = useReducer(
     chatBotReducer,
@@ -28,6 +29,16 @@ const useChatBot = (Scenario = TestNodes) => {
   )
 
   const { addVariable } = bindActionCreators(chatBotActions, chatBotDispatch)
+
+  const changeNode = (node) => {
+    if (Scenario[node].type === NodeTypes.ExecuteNode) {
+      const { execute } = Scenario[node]
+      dispatchCommand(execute)
+      return
+    } else {
+      changeNodeRef(node)
+    }
+  }
 
   const dispatchCommand = ({ type = CommandsTypes.changeNode, ...payload }) => {
     const { name: commandName } = payload
@@ -49,6 +60,7 @@ const useChatBot = (Scenario = TestNodes) => {
         return
       }
       case CommandsTypes.changeNodeWithMsg: {
+        console.log('changeNodeWithMsg')
         const { message, to: node } = payload
         messageFromBot(message)
         changeNode(node)
@@ -74,11 +86,12 @@ const useChatBot = (Scenario = TestNodes) => {
         changeNode(nextNode)
         return
       }
-
       messageFromBot()
       return
     }
   }
+
+  //console.log('state', appState)
 
   return {
     messages: appState?.messages,

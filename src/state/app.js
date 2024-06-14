@@ -1,35 +1,33 @@
 import { FromTypes } from '../Message'
 import { TestNodesNames } from '../Scanarios/TestScenario/commands'
 
-export const appReducer =
-  (Scenario = TestNodes) =>
-  (state, action) => {
-    //console.log(state)
-    switch (action.type) {
-      case ActionTypes.addMessage: {
-        // console.log('add mes')
-        const { text, from } = action.payload
-        const { messages } = state
-        return { ...state, messages: [...messages, { text, from }] }
-      }
-      case ActionTypes.changeNode: {
-        const { to } = action.payload
-        //console.log(to)
-        return {
-          ...state,
-          currentNode: to,
-          currentCommands: Scenario[to].commands,
-          messages: [
-            ...state.messages,
-            { from: FromTypes.bot, text: Scenario[to].message },
-          ],
-        }
-      }
-      default: {
-        return state
+export const appReducer = (Scenario) => (state, action) => {
+  //console.log(state)
+  switch (action.type) {
+    case ActionTypes.addMessage: {
+      // console.log('add mes')
+      const { text, from } = action.payload
+      const { messages } = state
+      return { ...state, messages: [...messages, { text, from }] }
+    }
+    case ActionTypes.changeNode: {
+      const { to } = action.payload
+      //console.log(to)
+      return {
+        ...state,
+        currentNode: to,
+        currentCommands: Scenario[to].commands,
+        messages: [
+          ...state.messages,
+          { from: FromTypes.bot, text: Scenario[to].message },
+        ],
       }
     }
+    default: {
+      return state
+    }
   }
+}
 
 export const ActionTypes = {
   addMessage: 'addMessage',
@@ -37,10 +35,7 @@ export const ActionTypes = {
   changeNodeWithMsg: 'changeNodeWithMsg',
 }
 
-export const AppInitState = (
-  Scenario = TestNodes,
-  currentNode = TestNodesNames.start
-) => ({
+export const AppInitState = (Scenario, currentNode) => ({
   messages: [
     { from: FromTypes.bot, text: 'Вечер в хату' },
     { from: FromTypes.user, text: 'Че там с деньгами?' },

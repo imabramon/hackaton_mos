@@ -4,6 +4,8 @@ import MessageInput from './MessageInput'
 import MessageList from './MessageList'
 import { FromTypes } from './Message'
 import useChatBot from './useChatBot'
+import { MainScenario } from './Scanarios/Main'
+import { MainNodeNames } from './Scanarios/Main/types'
 
 const DialogWindow = styled.div`
   width: 500px;
@@ -15,37 +17,12 @@ const DialogWindow = styled.div`
   grid-template-rows: 1fr 50px;
 `
 
-const MockData = [
-  { from: FromTypes.bot },
-  { from: FromTypes.user },
-  { from: FromTypes.bot },
-]
-
-const MockCommands = [
-  'Говно',
-  'Залупа',
-  'Пенис',
-  'Хер',
-  'Давалка',
-  'Хуй',
-  'Блядина',
-  'Говно',
-  'Залупа',
-  'Пенис',
-  'Хер',
-  'Давалка',
-  'Хуй',
-  'Блядина',
-]
-
 const Dialog = () => {
-  const { messages, commands, dispatchCommand, dispatchMessage } = useChatBot()
+  const { messages, commands, dispatchCommand, dispatchMessage } = useChatBot(
+    MainScenario,
+    MainNodeNames.start
+  )
 
-  //   const dispatchCommand = (command) => {
-  //     alert(command)
-  //   }
-
-  // console.log(commands)
   return (
     <DialogWindow>
       <MessageList data={messages ?? []} />
