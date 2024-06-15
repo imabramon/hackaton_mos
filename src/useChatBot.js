@@ -21,6 +21,7 @@ const useChatBot = (Scenario, startNode) => {
     messageFromBot,
     messageFromUser,
     changeNode: changeNodeRef,
+    sendFile,
   } = bindActionCreators(appActions, appDispatch)
 
   const [chatBotState, chatBotDispatch] = useReducer(
@@ -60,10 +61,16 @@ const useChatBot = (Scenario, startNode) => {
         return
       }
       case CommandsTypes.changeNodeWithMsg: {
-        console.log('changeNodeWithMsg')
+        // console.log('changeNodeWithMsg')
         const { message, to: node } = payload
         messageFromBot(message)
         changeNode(node)
+        return
+      }
+      case CommandsTypes.sendFile: {
+        const { link, to: nextNode } = payload
+        sendFile(link)
+        changeNode(nextNode)
         return
       }
     }
@@ -78,15 +85,18 @@ const useChatBot = (Scenario, startNode) => {
         errorMessage,
         nextNode,
         answerVar,
-        proccesing = (arg) => arg,
+        processing = (arg) => arg,
       } = Scenario[appState.currentNode]
 
+      // console.log(processing)
+
       if (validation(message)) {
-        addVariable(answerVar, proccesing(message))
+        addVariable(answerVar, processing(message))
         changeNode(nextNode)
         return
       }
-      messageFromBot()
+
+      messageFromBot(errorMessage)
       return
     }
   }

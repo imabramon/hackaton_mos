@@ -1,6 +1,9 @@
+import { validateDate } from '../../utils/validation'
 import { NodeTypes, ScenarioNode } from '../types'
 import {
   getAmount,
+  getForecast,
+  getPurchase,
   goBack,
   goTo,
   goToAmount,
@@ -11,20 +14,15 @@ import { MainNodeNames } from './types'
 
 export const Start: ScenarioNode<MainNodeNames> = {
   type: NodeTypes.BaseNode,
-  commands: [
-    goToAmount,
-    goToForecast,
-    goToPurchase,
-    goTo('тест', MainNodeNames.amountResult),
-  ],
+  commands: [goToAmount, goToForecast, goToPurchase],
   message: 'Выберите команду',
 }
 
 export const AmountGetDate: ScenarioNode<MainNodeNames> = {
   type: NodeTypes.AnswerNode,
-  commands: [],
+  commands: [goBack(MainNodeNames.start)],
   message: 'Ввведите дату в формате дд.мм.ггг',
-  validation: () => true,
+  validation: (input) => validateDate(input),
   answerVar: 'amountDate',
   nextNode: MainNodeNames.amountGetProducts,
   errorMessage: 'Ввведите дату в формате дд.мм.ггг',
@@ -38,6 +36,9 @@ export const AmountGetProducts: ScenarioNode<MainNodeNames> = {
   answerVar: 'amountProducts',
   nextNode: MainNodeNames.amountResult,
   errorMessage: 'Ввведите инетересующие товары через запятую',
+  processing: (input: string) => {
+    return input.split(',').map((item) => item.trim())
+  },
 }
 
 export const AmountResult: ScenarioNode<MainNodeNames> = {
@@ -52,13 +53,21 @@ export const ForecastGetProducts: ScenarioNode<MainNodeNames> = {
   message: 'Ввведите инетересующие товары через запятую',
   validation: () => true,
   answerVar: 'forecastProducts',
-  nextNode: MainNodeNames.amountGetProducts,
+  nextNode: MainNodeNames.forecastResult,
   errorMessage: 'Ввведите инетересующие товары через запятую',
+  processing: (input: string) => {
+    return input.split(',').map((item) => item.trim())
+  },
 }
-// export const forecastResult: ScenarioNode<MainNodeNames> = {}
-//export const purchaseResult: ScenarioNode<MainNodeNames> = {}
-export const PurchaseEdit: ScenarioNode<MainNodeNames> = {
-  type: NodeTypes.BaseNode,
+
+export const ForecastResult: ScenarioNode<MainNodeNames> = {
+  type: NodeTypes.ExecuteNode,
   commands: [],
-  message: 'Выберите команду',
+  execute: getForecast,
+}
+
+export const PurchaseResult: ScenarioNode<MainNodeNames> = {
+  execute: getPurchase,
+  type: NodeTypes.ExecuteNode,
+  commands: [],
 }

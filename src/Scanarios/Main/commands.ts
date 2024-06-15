@@ -1,3 +1,11 @@
+import {
+  getAmountFromServer,
+  getForecastFromServer,
+  getPurchaseFromServer,
+} from '../../services'
+import { jsonToBlob } from '../../utils/jsonToBlob'
+import { makeLinkFromBlob } from '../../utils/makeLinkFromBlob'
+import { makeMessageText } from '../../utils/makeMessageText'
 import { Command, CommandsTypes } from '../types'
 import { MainNodeNames } from './types'
 
@@ -41,8 +49,38 @@ export const getAmount: Command<MainNodeNames> = {
   name: 'Получить остаток',
   type: CommandsTypes.async,
   message: 'Загружаем данные...',
-  callback: async () => {
-    const answer = 'Тестовое сообщение'
+  callback: async ({ amountDate, amountProducts }) => {
+    const data = getAmountFromServer(amountProducts, amountDate)
+    const answer = `Остатки товаров ${amountDate}:\n\n${makeMessageText(data, ({ name, amount }: any) => `${name} - ${amount} шт`)}`
     return goToWithMessage(answer, MainNodeNames.start)
+  },
+}
+
+export const getForecast: Command<MainNodeNames> = {
+  name: 'Получить прогноз',
+  type: CommandsTypes.async,
+  message: 'Загружаем данные...',
+  callback: async ({ forecastProducts }) => {
+    const data = getForecastFromServer(forecastProducts)
+    const answer = `Проогноз:\n\n${makeMessageText(data, ({ name, date }: any) => `${name} закончится ${date}`)}`
+    return goToWithMessage(answer, MainNodeNames.start)
+  },
+}
+
+export const getPurchase: Command<MainNodeNames> = {
+  name: 'Получить файл',
+  type: CommandsTypes.async,
+  message: 'Загружаем данные...',
+  callback: async () => {
+    const data = getPurchaseFromServer()
+    const blob = jsonToBlob(data)
+    const link = makeLinkFromBlob(blob)
+
+    return {
+      type: CommandsTypes.sendFile,
+      name: 'Отправка файла',
+      link,
+      to: MainNodeNames.start,
+    }
   },
 }

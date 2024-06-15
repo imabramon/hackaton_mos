@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import UserInfoContext from './UserInfoContext'
 import MessageBox from './MessageBox'
+import MesseageFile from './MessageFile'
 
 export enum FromTypes {
   bot,
@@ -8,12 +9,16 @@ export enum FromTypes {
 }
 
 interface MessagePropTypes {
-  from?: FromTypes;
-  type?: string;
-  text?: string;
+  from?: FromTypes
+  type?: string
+  text?: string
+  link?: any
 }
 
-const Message = ({ from, type, text }: MessagePropTypes) => {
+const Message = ({ from, type, text, link }: MessagePropTypes) => {
+  if (type === 'file') {
+    return <MesseageFile link={link} />
+  }
   switch (from) {
     case FromTypes.bot: {
       return <BotMessage text={text} type={type} />
@@ -26,7 +31,7 @@ const Message = ({ from, type, text }: MessagePropTypes) => {
 
 const UserMessage = ({ text }: MessagePropTypes) => {
   const { username } = useContext(UserInfoContext)
-  return <MessageBox title={username} text={text} position='right' />
+  return <MessageBox title={username} text={text} position="right" />
 }
 
 const BotMessage = ({ text }: MessagePropTypes) => {

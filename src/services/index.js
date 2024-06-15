@@ -1,4 +1,5 @@
-export const getAmount = (prodcuts, date) => {
+export const getAmountFromServer = (prodcuts, date) => {
+  console.log('getAmountFromServer', prodcuts, date)
   return [
     {
       name: 'Клей',
@@ -15,24 +16,24 @@ export const getAmount = (prodcuts, date) => {
   ]
 }
 
-export const getForecast = (prodcuts) => {
+export const getForecastFromServer = (prodcuts) => {
   return [
     {
       name: 'Клей',
-      date: '5',
+      date: '12.12.12',
     },
     {
       name: 'Учебники',
-      amount: '5',
+      date: '12.12.12',
     },
     {
       name: 'Краска',
-      amount: '5',
+      date: '12.12.12',
     },
   ]
 }
 
-export const getPurchase = () => {
+export const getPurchaseFromServer = () => {
   return {
     id: 1, //идетнификатор расчета
     lotEntityId: 1, //Идентификатор лота

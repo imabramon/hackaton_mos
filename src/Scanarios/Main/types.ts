@@ -6,5 +6,4 @@ export const enum MainNodeNames {
   forecastGetProducts,
   forecastResult,
   purchaseResult,
-  purchaseEdit,
 }

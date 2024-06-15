@@ -23,6 +23,18 @@ export const appReducer = (Scenario) => (state, action) => {
         ],
       }
     }
+    case ActionTypes.sendFile: {
+      const { link } = action.payload
+      console.log('reducer', link)
+      //console.log(to)
+      return {
+        ...state,
+        messages: [
+          ...state.messages,
+          { from: FromTypes.bot, link, type: 'file' },
+        ],
+      }
+    }
     default: {
       return state
     }
@@ -33,6 +45,7 @@ export const ActionTypes = {
   addMessage: 'addMessage',
   changeNode: 'changeNode',
   changeNodeWithMsg: 'changeNodeWithMsg',
+  sendFile: 'sendFile',
 }
 
 export const AppInitState = (Scenario, currentNode) => ({
@@ -60,8 +73,16 @@ const changeNode = (node) => ({
   payload: { to: node },
 })
 
+const sendFile = (link) => ({
+  type: ActionTypes.sendFile,
+  payload: {
+    link,
+  },
+})
+
 export const appActions = {
   messageFromBot,
   messageFromUser,
   changeNode,
+  sendFile,
 }

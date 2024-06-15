@@ -1,5 +1,13 @@
 import { Scenario } from '../types'
-import { AmountGetDate, AmountGetProducts, AmountResult, Start } from './nodes'
+import {
+  AmountGetDate,
+  AmountGetProducts,
+  AmountResult,
+  ForecastGetProducts,
+  ForecastResult,
+  PurchaseResult,
+  Start,
+} from './nodes'
 import { MainNodeNames } from './types'
 
 export const MainScenario: Scenario<MainNodeNames> = {
@@ -7,8 +15,7 @@ export const MainScenario: Scenario<MainNodeNames> = {
   [MainNodeNames.amountGetDate]: AmountGetDate,
   [MainNodeNames.amountGetProducts]: AmountGetProducts,
   [MainNodeNames.amountResult]: AmountResult,
-  [MainNodeNames.forecastGetProducts]: Start,
-  [MainNodeNames.forecastResult]: Start,
-  [MainNodeNames.purchaseResult]: Start,
-  [MainNodeNames.purchaseEdit]: Start,
+  [MainNodeNames.forecastGetProducts]: ForecastGetProducts,
+  [MainNodeNames.forecastResult]: ForecastResult,
+  [MainNodeNames.purchaseResult]: PurchaseResult,
 }

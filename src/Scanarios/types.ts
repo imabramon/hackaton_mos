@@ -1,5 +1,3 @@
-import { TestNodesNames } from './TestScenario/commands'
-
 type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never }
 type XOR<T, U> = T | U extends object
   ? (Without<T, U> & U) | (Without<U, T> & T)
@@ -9,6 +7,7 @@ export enum CommandsTypes {
   changeNode,
   async,
   changeNodeWithMsg,
+  sendFile,
 }
 
 type BaseCommand = {
@@ -16,7 +15,10 @@ type BaseCommand = {
   name: string
 }
 
-type OtherCommands<NodeNames> = GoToCommand<NodeNames> | AsyncCommand<NodeNames>
+type OtherCommands<NodeNames> =
+  | GoToCommand<NodeNames>
+  | AsyncCommand<NodeNames>
+  | SendFileCommand<NodeNames>
 
 export type Command<NodeNames> = XOR<
   BaseCommand,
@@ -30,6 +32,11 @@ export type GoToCommand<NodeNames> = {
 export type AsyncCommand<NodeNames> = {
   message: string
   callback: (context: any) => Promise<Command<NodeNames>>
+}
+
+export type SendFileCommand<NodeNames> = {
+  link: any
+  to: NodeNames
 }
 
 export enum NodeTypes {
@@ -59,6 +66,7 @@ export type AnswerNode<NodeNames> = {
   answerVar: string
   errorMessage: string
   nextNode: NodeNames
+  processing?: (...args: any) => any
 }
 
 export type ExecuteNode<NodeNames> = {
