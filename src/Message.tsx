@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { forwardRef, useContext } from 'react'
 import UserInfoContext from './UserInfoContext'
 import MessageBox from './MessageBox'
 import MesseageFile from './MessageFile'

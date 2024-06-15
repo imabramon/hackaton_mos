@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import styled, { css } from 'styled-components'
 
 // const Right = css`
@@ -133,7 +134,7 @@ const Text = styled.p`
   font-size: 18px;
 `
 
-const MessageBox = ({ text, title, position }) => {
+const MessageBox = ({ text, title, position }, ref) => {
   return (
     <Container position={position}>
       {/* <Title>{title}</Title> */}

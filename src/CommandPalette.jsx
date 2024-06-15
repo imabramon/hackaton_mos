@@ -6,7 +6,7 @@ const Container = styled.div`
   transform: translateY(-100%);
   width: 100%;
   height: fit-content;
-  background-color: black;
+  //background-color: black;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
@@ -14,10 +14,11 @@ const Container = styled.div`
 `
 
 const Command = styled.span`
-  padding: 5px;
-  border-radius: 5px;
+  padding: 8px;
+  border-radius: 15px;
   background-color: green;
   color: white;
+  font-size: 12px;
 `
 
 function shuffle(array) {

@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { forwardRef, useRef } from 'react'
 import styled, { css } from 'styled-components'
 
 import Icon from './assets/icons8-file-100.png'
@@ -86,7 +86,7 @@ const MesseageFile = ({ name = 'Файл закупки', link }) => {
   console.log(link)
   const linkRef = useRef()
   return (
-    <Container>
+    <Container ref={ref}>
       <DowloadLink ref={linkRef} href={link} download={name + '.json'} />
       <FileIcon
         onClick={() => {

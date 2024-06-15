@@ -10,7 +10,7 @@ import { MainNodeNames } from './Scanarios/Main/types'
 const DialogWindow = styled.div`
   width: 500px;
   height: 98vh;
-  background-color: grey;
+  background-color: white;
   margin-left: auto;
   margin-right: auto;
   display: grid;
