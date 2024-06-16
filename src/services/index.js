@@ -1,39 +1,39 @@
-export const getAmountFromServer = (prodcuts, date) => {
+export const getAmountFromServer = async (prodcuts, date) => {
   console.log('getAmountFromServer', prodcuts, date)
   return [
     {
-      name: 'Клей',
+      name: 'Печь СВЧ SUPRA MWS-2117MW, 21л., 700Вт., белый',
       amount: '5',
     },
     {
-      name: 'Учебники',
+      name: 'Микроволновая печь SAMSUNG ME83XR/BWT, мощность 800 Вт, черная',
       amount: '5',
     },
     {
-      name: 'Краска',
+      name: 'Огнетушитель порошковый ОП-5 (з) (АВСЕ)',
       amount: '5',
     },
   ]
 }
 
-export const getForecastFromServer = (prodcuts) => {
+export const getForecastFromServer = async (prodcuts) => {
   return [
     {
-      name: 'Клей',
+      name: 'Печь СВЧ SUPRA MWS-2117MW, 21л., 700Вт., белый',
       date: '12.12.12',
     },
     {
-      name: 'Учебники',
+      name: 'Микроволновая печь SAMSUNG ME83XR/BWT, мощность 800 Вт, черная',
       date: '12.12.12',
     },
     {
-      name: 'Краска',
+      name: 'Огнетушитель порошковый ОП-5 (з) (АВСЕ)',
       date: '12.12.12',
     },
   ]
 }
 
-export const getPurchaseFromServer = () => {
+export const getPurchaseFromServer = async () => {
   return {
     id: 1, //идетнификатор расчета
     lotEntityId: 1, //Идентификатор лота

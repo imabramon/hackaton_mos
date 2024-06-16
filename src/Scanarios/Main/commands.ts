@@ -50,9 +50,16 @@ export const getAmount: Command<MainNodeNames> = {
   type: CommandsTypes.async,
   message: 'Загружаем данные...',
   callback: async ({ amountDate, amountProducts }) => {
-    const data = getAmountFromServer(amountProducts, amountDate)
-    const answer = `Остатки товаров ${amountDate}:\n\n${makeMessageText(data, ({ name, amount }: any) => `${name} - ${amount} шт`)}`
-    return goToWithMessage(answer, MainNodeNames.start)
+    try {
+      const data = await getAmountFromServer(amountProducts, amountDate)
+      const answer = `Остатки товаров ${amountDate}:\n\n${makeMessageText(data, ({ name, amount }: any) => `${name} - ${amount} шт`)}`
+      return goToWithMessage(answer, MainNodeNames.start)
+    } catch {
+      return goToWithMessage(
+        'Произошла ошибка, попробуйте позже',
+        MainNodeNames.start
+      )
+    }
   },
 }
 
@@ -61,9 +68,16 @@ export const getForecast: Command<MainNodeNames> = {
   type: CommandsTypes.async,
   message: 'Загружаем данные...',
   callback: async ({ forecastProducts }) => {
-    const data = getForecastFromServer(forecastProducts)
-    const answer = `Проогноз:\n\n${makeMessageText(data, ({ name, date }: any) => `${name} закончится ${date}`)}`
-    return goToWithMessage(answer, MainNodeNames.start)
+    try {
+      const data = await getForecastFromServer(forecastProducts)
+      const answer = `Проогноз:\n\n${makeMessageText(data, ({ name, date }: any) => `${name} закончится ${date}`)}`
+      return goToWithMessage(answer, MainNodeNames.start)
+    } catch {
+      return goToWithMessage(
+        'Произошла ошибка, попробуйте позже',
+        MainNodeNames.start
+      )
+    }
   },
 }
 
@@ -72,15 +86,22 @@ export const getPurchase: Command<MainNodeNames> = {
   type: CommandsTypes.async,
   message: 'Загружаем данные...',
   callback: async () => {
-    const data = getPurchaseFromServer()
-    const blob = jsonToBlob(data)
-    const link = makeLinkFromBlob(blob)
+    try {
+      const data = await getPurchaseFromServer()
+      const blob = jsonToBlob(data)
+      const link = makeLinkFromBlob(blob)
 
-    return {
-      type: CommandsTypes.sendFile,
-      name: 'Отправка файла',
-      link,
-      to: MainNodeNames.start,
+      return {
+        type: CommandsTypes.sendFile,
+        name: 'Отправка файла',
+        link,
+        to: MainNodeNames.start,
+      }
+    } catch {
+      return goToWithMessage(
+        'Произошла ошибка, попробуйте позже',
+        MainNodeNames.start
+      )
     }
   },
 }

@@ -86,7 +86,7 @@ const MesseageFile = ({ name = 'Файл закупки', link }) => {
   console.log(link)
   const linkRef = useRef()
   return (
-    <Container ref={ref}>
+    <Container>
       <DowloadLink ref={linkRef} href={link} download={name + '.json'} />
       <FileIcon
         onClick={() => {
